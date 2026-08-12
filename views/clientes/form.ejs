@@ -1,0 +1,40 @@
+<header class="page-head">
+  <p class="eyebrow"><%= cliente ? 'Editar registro' : 'Alta de cliente' %></p>
+  <h1><%= cliente ? cliente.nombre : 'Nuevo cliente' %></h1>
+  <p class="subhead">
+    <% if (cliente) { %>
+      Estos cambios solo afectan datos de contacto. Para extender la membresia usa "Renovar" en el listado.
+    <% } else { %>
+      Al registrar al cliente se activa su primera membresia de <%= duracion %> dias por $<%= costo %> MXN.
+    <% } %>
+  </p>
+</header>
+
+<section class="panel panel--narrow">
+  <form method="post" action="<%= cliente ? '/clientes/' + cliente.id + '?_method=PUT' : '/clientes' %>" class="form">
+    <label class="field">
+      <span>Nombre completo</span>
+      <input type="text" name="nombre" required value="<%= cliente ? cliente.nombre : '' %>" placeholder="Ej. Karina Solis Reyes">
+    </label>
+    <label class="field">
+      <span>Telefono</span>
+      <input type="tel" name="telefono" value="<%= cliente ? cliente.telefono : '' %>" placeholder="618 123 4567">
+    </label>
+    <label class="field">
+      <span>Correo</span>
+      <input type="email" name="email" value="<%= cliente ? cliente.email : '' %>" placeholder="cliente@correo.com">
+    </label>
+
+    <% if (!cliente) { %>
+      <div class="cost-preview">
+        <span>Cuota a cobrar hoy</span>
+        <strong>$<%= costo %> MXN &middot; <%= duracion %> dias de acceso</strong>
+      </div>
+    <% } %>
+
+    <div class="form-actions">
+      <a class="btn btn-ghost" href="/clientes">Cancelar</a>
+      <button class="btn btn-accent" type="submit"><%= cliente ? 'Guardar cambios' : 'Registrar y cobrar $' + costo %></button>
+    </div>
+  </form>
+</section>

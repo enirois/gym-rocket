@@ -1,0 +1,75 @@
+<header class="page-head">
+  <p class="eyebrow">Base de clientes</p>
+  <h1>Clientes</h1>
+  <p class="subhead">Alta, edicion, baja y renovacion de membresias &middot; cuota unica de $<%= costo %> MXN por mes.</p>
+</header>
+
+<section class="toolbar">
+  <form class="search-form" method="get" action="/clientes">
+    <input type="text" name="q" value="<%= q %>" placeholder="Buscar por nombre, telefono o correo...">
+    <select name="estado">
+      <option value="" <%= estado === '' ? 'selected' : '' %>>Todos los estados</option>
+      <option value="activa" <%= estado === 'activa' ? 'selected' : '' %>>Activas</option>
+      <option value="vencida" <%= estado === 'vencida' ? 'selected' : '' %>>Vencidas</option>
+    </select>
+    <button class="btn btn-ghost" type="submit">Filtrar</button>
+  </form>
+  <a class="btn btn-accent" href="/clientes/nuevo">+ Nuevo cliente</a>
+</section>
+
+<section class="panel">
+  <% if (clientes.length === 0) { %>
+    <div class="empty-state">
+      <p>No se encontraron clientes con esos criterios.</p>
+    </div>
+  <% } else { %>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Contacto</th>
+            <th>Vigencia</th>
+            <th>Restante</th>
+            <th>Estado</th>
+            <th class="col-actions">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% clientes.forEach(c => { %>
+            <tr>
+              <td>
+                <div class="cell-name"><%= c.nombre %></div>
+                <div class="cell-sub mono">#<%= c.id.slice(-6) %></div>
+              </td>
+              <td>
+                <div><%= c.telefono || '—' %></div>
+                <div class="cell-sub"><%= c.email || '—' %></div>
+              </td>
+              <td class="mono">
+                <%= c.fechaInicio %> &rarr; <%= c.fechaFin %>
+              </td>
+              <td class="mono">
+                <%= c.diasRestantes >= 0 ? c.diasRestantes + ' dias' : Math.abs(c.diasRestantes) + ' dias vencida' %>
+              </td>
+              <td>
+                <span class="badge badge--<%= c.estado %>"><%= c.estado === 'activa' ? 'Activa' : 'Vencida' %></span>
+              </td>
+              <td class="col-actions">
+                <div class="actions">
+                  <form method="post" action="/clientes/<%= c.id %>/renovar">
+                    <button class="btn btn-mini btn-accent" type="submit" title="Suma 1 mes por $<%= costo %>">Renovar</button>
+                  </form>
+                  <a class="btn btn-mini btn-ghost" href="/clientes/<%= c.id %>/editar">Editar</a>
+                  <form method="post" action="/clientes/<%= c.id %>?_method=DELETE" onsubmit="return confirm('¿Eliminar a <%= c.nombre %>? Esta accion no se puede deshacer.');">
+                    <button class="btn btn-mini btn-danger" type="submit">Eliminar</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>

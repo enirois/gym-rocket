@@ -1,0 +1,46 @@
+<header class="page-head">
+  <p class="eyebrow">Control de vigencia</p>
+  <h1>Membresias</h1>
+  <p class="subhead">Cada barra marca el tiempo restante del ciclo de 30 dias, como un cronometro de serie.</p>
+</header>
+
+<section class="tabs">
+  <a href="/membresias" class="tab <%= filtro === 'todas' ? 'is-active' : '' %>">Todas <span class="tab-count"><%= resumen.total %></span></a>
+  <a href="/membresias?estado=activa" class="tab <%= filtro === 'activa' ? 'is-active' : '' %>">Activas <span class="tab-count"><%= resumen.activas %></span></a>
+  <a href="/membresias?estado=vencida" class="tab <%= filtro === 'vencida' ? 'is-active' : '' %>">Vencidas <span class="tab-count"><%= resumen.vencidas %></span></a>
+</section>
+
+<section class="panel">
+  <% if (clientes.length === 0) { %>
+    <div class="empty-state">
+      <p>No hay membresias que coincidan con este filtro.</p>
+    </div>
+  <% } else { %>
+    <div class="membership-list">
+      <% clientes.forEach(c => { %>
+        <% const pct = Math.max(0, Math.min(100, Math.round((c.diasRestantes / 30) * 100))); %>
+        <% const tono = c.estado === 'vencida' ? 'vencida' : (c.diasRestantes <= 5 ? 'warn' : 'activa'); %>
+        <div class="membership-row">
+          <div class="membership-id">
+            <div class="cell-name"><%= c.nombre %></div>
+            <div class="cell-sub mono"><%= c.fechaInicio %> &rarr; <%= c.fechaFin %></div>
+          </div>
+          <div class="gauge">
+            <div class="gauge-track">
+              <div class="gauge-fill gauge-fill--<%= tono %>" style="width: <%= c.estado === 'vencida' ? 100 : pct %>%;"></div>
+            </div>
+            <div class="gauge-label mono">
+              <%= c.diasRestantes >= 0 ? c.diasRestantes + ' / 30 dias' : Math.abs(c.diasRestantes) + ' dias de retraso' %>
+            </div>
+          </div>
+          <div class="membership-status">
+            <span class="badge badge--<%= c.estado %>"><%= c.estado === 'activa' ? 'Activa' : 'Vencida' %></span>
+            <form method="post" action="/clientes/<%= c.id %>/renovar">
+              <button class="btn btn-mini btn-accent" type="submit">Renovar $500</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</section>

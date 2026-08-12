@@ -1,0 +1,67 @@
+<header class="page-head">
+  <p class="eyebrow">Marcador del dia</p>
+  <h1>Panel general</h1>
+  <p class="subhead">Estado en tiempo real de tu cartera de clientes y membresias.</p>
+</header>
+
+<section class="scoreboard">
+  <div class="score-tile score-tile--hero">
+    <span class="score-num"><%= resumen.total %></span>
+    <span class="score-label">Clientes registrados</span>
+  </div>
+  <div class="score-tile">
+    <span class="score-num tone-activa"><%= resumen.activas %></span>
+    <span class="score-label">Membresias activas</span>
+  </div>
+  <div class="score-tile">
+    <span class="score-num tone-vencida"><%= resumen.vencidas %></span>
+    <span class="score-label">Membresias vencidas</span>
+  </div>
+  <div class="score-tile">
+    <span class="score-num tone-warn"><%= resumen.porVencerPronto %></span>
+    <span class="score-label">Vencen en &le; 5 dias</span>
+  </div>
+  <div class="score-tile">
+    <span class="score-num">$<%= resumen.ingresos.toLocaleString('es-MX') %></span>
+    <span class="score-label">Ingresos acumulados</span>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2>Altas y renovaciones recientes</h2>
+    <a class="btn btn-ghost" href="/clientes">Ver todos los clientes &rarr;</a>
+  </div>
+
+  <% if (recientes.length === 0) { %>
+    <div class="empty-state">
+      <p>Todavia no hay clientes registrados.</p>
+      <a class="btn btn-accent" href="/clientes/nuevo">Registrar el primer cliente</a>
+    </div>
+  <% } else { %>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Vence</th>
+            <th>Dias restantes</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% recientes.forEach(c => { %>
+            <tr>
+              <td><%= c.nombre %></td>
+              <td class="mono"><%= c.fechaFin %></td>
+              <td class="mono"><%= c.diasRestantes >= 0 ? c.diasRestantes + ' d' : 'vencida' %></td>
+              <td>
+                <span class="badge badge--<%= c.estado %>"><%= c.estado === 'activa' ? 'Activa' : 'Vencida' %></span>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>

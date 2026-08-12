@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= titulo %> · FORJA Gym</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">F</span>
+        <span class="brand-name">FORJA<em>gym</em></span>
+      </div>
+      <nav class="nav">
+        <a href="/" class="nav-link <%= activeNav === 'inicio' ? 'is-active' : '' %>">
+          <span class="nav-index">01</span> Panel general
+        </a>
+        <a href="/clientes" class="nav-link <%= activeNav === 'clientes' ? 'is-active' : '' %>">
+          <span class="nav-index">02</span> Clientes
+        </a>
+        <a href="/membresias" class="nav-link <%= activeNav === 'membresias' ? 'is-active' : '' %>">
+          <span class="nav-index">03</span> Membresias
+        </a>
+      </nav>
+      <div class="sidebar-foot">
+        <span class="foot-label">Cuota mensual</span>
+        <span class="foot-value">$500 MXN</span>
+      </div>
+    </aside>
+    <main class="main">
+      <%- body %>
+    </main>
+  </div>
+</body>
+</html>
